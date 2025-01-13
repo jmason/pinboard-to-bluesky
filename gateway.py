@@ -80,6 +80,8 @@ def fetch_embed_url_card(pds_url: str, access_token: str, url: str) -> Dict:
       resp.raise_for_status()
     except requests.exceptions.HTTPError:
       return # just don't use an embed card
+    except requests.exceptions.ConnectionError:
+      return # just don't use an embed card
 
     soup = BeautifulSoup(resp.text, "html.parser")
 
