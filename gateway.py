@@ -98,6 +98,8 @@ def fetch_embed_url_card(pds_url: str, access_token: str, url: str) -> Dict:
     image_tag = soup.find("meta", property="og:image")
     if image_tag:
         img_url = image_tag["content"]
+        if "http://localhost" in img_url:
+            return # can't use this image, don't use a card
         if "://" not in img_url:
             img_url = url + img_url
         try:
@@ -277,7 +279,7 @@ for entry in reversed(feed.entries):
             description = shortdesc + " [\u2026]"
 
         # Make the POST request
-        create_post(f"{title}\n\n{description}\n\n{link}", link)
+        create_post(f"{title} \u2014 {description}\n\n{link}", link)
         
         # Check the response status code
         print(f"Successfully posted")
