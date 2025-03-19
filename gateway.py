@@ -260,15 +260,16 @@ for entry in reversed(feed.entries):
         # Print the extracted information
         print(f"Title: {title}  Link: {link}")
 
-        extralen = len(title) + len(link) + 4
+        extralen = len(link) + 4
+        #extralen = len(title) + len(link) + 4
 
         if len(description) > 296-extralen:
             shortdesc = description[:293-extralen]
             shortdesc = re.sub(r'\w+$', '', shortdesc.rstrip()).rstrip()
             description = shortdesc + " [\u2026]"
 
-        # Make the POST request
-        create_post(f"{title} \u2014 {description}\n\n{link}", link)
+        create_post(f"{description}\n\n{link}", link)
+        #create_post(f"{title} \u2014 {description}\n\n{link}", link)
         
         # Check the response status code
         print(f"Successfully posted")
