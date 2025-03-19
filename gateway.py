@@ -5,14 +5,12 @@
 
 import feedparser
 import requests
-from urllib.parse import urlencode
 import sqlite3
 import re
 from datetime import datetime, timedelta, timezone
 import os
 import sys
 import json
-import argparse
 from typing import Dict, List
 from bs4 import BeautifulSoup
 
@@ -272,7 +270,7 @@ for entry in reversed(feed.entries):
         #create_post(f"{title} \u2014 {description}\n\n{link}", link)
         
         # Check the response status code
-        print(f"Successfully posted")
+        print("Successfully posted")
 
         # Mark the item as processed
         c.execute('INSERT INTO processed_items (link) VALUES (?)', (link,))
