@@ -1,0 +1,14 @@
+# Copy to "envs" and fill in.
+
+# The Pinboard feed to gateway from
+export feed_url="https://feeds.pinboard.in/rss/u:jm/"
+
+# The Bluesky site the account is at
+export bsky_site = "https://bsky.social"
+
+# the user for the bot Bluesky account
+export bsky_user = "..omitted....@jmason.org"
+
+# Password for the account
+export bsky_password = "........omitted........."
+

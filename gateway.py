@@ -3,21 +3,6 @@
 # based on https://gist.github.com/PSingletary/2396707785834418dab00e3d7a5c822f
 # https://github.com/bluesky-social/atproto-website/blob/main/examples/create_bsky_post.py
 
-# Fill in your auth details here (TODO move to an "env" file)
-
-bsky_site = "https://bsky.social"
-
-# the user for the bot Bluesky account
-bsky_user = "..omitted....@jmason.org"
-
-# Password for the account
-bsky_password = "........omitted........."
-
-# The Pinboard feed to gateway from
-feed_url = "https://feeds.pinboard.in/rss/u:jm/"
-
-# ------------------
-
 import feedparser
 import requests
 from urllib.parse import urlencode
@@ -31,6 +16,11 @@ import argparse
 from typing import Dict, List
 from bs4 import BeautifulSoup
 
+bsky_site = os.environ['bsky_site']
+bsky_user = os.environ['bsky_user']
+bsky_password = os.environ['bsky_password']
+feed_url = os.environ['feed_url']
+
 
 def bsky_login_session(pds_url: str, handle: str, password: str) -> Dict:
     resp = requests.post(
@@ -39,7 +29,6 @@ def bsky_login_session(pds_url: str, handle: str, password: str) -> Dict:
     )
     resp.raise_for_status()
     return resp.json()
-
 
 
 def upload_file(pds_url, access_token, filename, img_bytes) -> Dict:
@@ -65,7 +54,6 @@ def upload_file(pds_url, access_token, filename, img_bytes) -> Dict:
     return resp.json()["blob"]
 
 
-
 def fetch_embed_url_card(pds_url: str, access_token: str, url: str) -> Dict:
     # the required fields for an embed card
     card = {
@@ -78,9 +66,9 @@ def fetch_embed_url_card(pds_url: str, access_token: str, url: str) -> Dict:
     try:
       resp = requests.get(url)
       resp.raise_for_status()
-    except requests.exceptions.HTTPError:
-      return # just don't use an embed card
     except requests.exceptions.ConnectionError:
+      return # just don't use an embed card
+    except requests.exceptions.HTTPError:
       return # just don't use an embed card
 
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -239,6 +227,7 @@ def create_post(text, link):
     print(json.dumps(resp.json(), indent=2))
     resp.raise_for_status()
 
+
 # Parse the RSS feed
 feed = feedparser.parse(feed_url)
 
@@ -289,4 +278,3 @@ for entry in reversed(feed.entries):
         conn.commit()
 
 conn.close()
-
